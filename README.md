@@ -6,7 +6,7 @@
 
 ## 主要特性
 
-- 💬 **个性化AI角色**：模拟江景哲的电子分身，具有特定性格和专业知识背景
+- 💬 **个性化AI角色**：模拟我的电子分身，具有特定性格和专业知识背景
 - 📁 **对话历史管理**：自动保存所有对话记录，支持多会话切换
 - 🎨 **复古终端风格**：CRT显示器视觉效果，包括扫描线、噪点和辉光效果
 - 🤖 **多模型支持**：可选择GPT-4o、GPT-4 Turbo或GPT-3.5 Turbo
@@ -37,8 +37,8 @@
 
 1. 克隆仓库：
    ```bash
-   git clone https://github.com/yourusername/jiangjingzhe-gpt-terminal.git
-   cd jiangjingzhe-gpt-terminal
+   git clone https://github.com/khakhasshi/JIANG_AI_CHAT.git
+   cd JIANG_AI_CHAT
    ```
 
 2. 创建并激活虚拟环境：
