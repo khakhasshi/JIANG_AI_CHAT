@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JIANG  <div class="logo">JIANG'S</S></s></s><span class="blink">_</span>GPT</div>-GPT TERMINAL</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <!-- KaTeX JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .crt-cursor {
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes dots {
+      0% { content: ''; }
+      33% { content: '.'; }
+      66% { content: '..'; }
+      100% { content: '...'; }
+    }
+    .loading-dots::after {
+      content: '';
+      animation: dots 1s steps(3, end) infinite;
+    }
+    /* 新增闪烁下划线样式 */
+    .blink-underscore {
+      display: inline-block;
+      width: 1ch;
+      animation: blink 1s steps(1) infinite;
+    }
+    .crt-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      color: #00ff00;
+      text-shadow: 0 0 8px #0f0, 0 0 2px #0f0;
+      font-size: 2.2rem;
+      letter-spacing: 0.12em;
+      position: relative;
+    }
+    .crt-loader-text {
+      margin-bottom: 32px;
+      letter-spacing: 0.18em;
+      display: flex;
+      align-items: center;
+    }
+    .crt-loader-text span {
+      animation: crt-flicker 1.5s infinite alternate;
+    }
+    .crt-loader-text span:nth-child(1) { animation-delay: 0s; }
+    .crt-loader-text span:nth-child(2) { animation-delay: 0.1s; }
+    .crt-loader-text span:nth-child(3) { animation-delay: 0.2s; }
+    .crt-loader-text span:nth-child(4) { animation-delay: 0.3s; }
+    .crt-loader-text span:nth-child(5) { animation-delay: 0.4s; }
+    .crt-loader-text span:nth-child(6) { animation-delay: 0.5s; }
+    .crt-loader-text span:nth-child(7) { animation-delay: 0.6s; }
+    .crt-cursor {
+      margin-left: 0.2em;
+      animation: crt-blink 1s steps(1) infinite;
+    }
+    @keyframes crt-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    @keyframes crt-flicker {
+      0% { opacity: 1; text-shadow: 0 0 8px #0f0, 0 0 2px #0f0; }
+      50% { opacity: 0.7; text-shadow: 0 0 16px #0f0, 0 0 4px #0f0; }
+      100% { opacity: 1; text-shadow: 0 0 8px #0f0, 0 0 2px #0f0; }
+    }
+    .crt-loader-bar {
+      width: 320px;
+      max-width: 80vw;
+      height: 12px;
+      background: linear-gradient(to right, #003800 0%, #00ff00 100%);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 24px;
+      box-shadow: 0 0 16px #0f0 inset, 0 0 2px #0f0;
+    }
+    .crt-loader-bar-scan {
+      position: absolute;
+      left: -40px; top: 0; bottom: 0;
+      width: 40px;
+      background: linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%);
+      opacity: 0.25;
+      filter: blur(2px);
+      animation: crt-scan-move 1.2s linear infinite;
+    }
+    @keyframes crt-scan-move {
+      0% { left: -40px; }
+      100% { left: 100%; }
+    }
+    .crt-loader-noise {
+      position: absolute;
+      left: 0; top: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      opacity: 0.08;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABnSURBVGhD7cExAQAwDMCg+zfdm1hIeJAkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZL0BzZ6ARF0k3Z4AAAAAElFTkSuQmCC');
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute">
+    <filter id="crt-sphere" x="0" y="0">
+      <feImage result="warp"
+        xlink:href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 1 1'><radialGradient id='g'><stop offset='70%' stop-color='white'/><stop offset='100%' stop-color='black'/></radialGradient><rect width='1' height='1' fill='url(%23g)'/></svg>"
+        x="0" y="0" width="100%" height="100%"/>
+      <feDisplacementMap in2="warp" in="SourceGraphic" scale="40" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+  <!-- 复古加载动画 -->
+  <div id="loading-spinner" style="
+    position:fixed;left:0;top:0;width:100vw;height:100vh;
+    background:#101c10;z-index:9999;display:flex;align-items:center;justify-content:center;
+    transition:opacity 0.5s;">
+    <div class="crt-loader">
+      <div class="crt-loader-text">
+        <span>L</span><span>O</span><span>A</span><span>D</span><span>I</span><span>N</span><span>G</span>
+        <span class="crt-cursor">█</span>
+      </div>
+      <div class="crt-loader-bar">
+        <div class="crt-loader-bar-scan"></div>
+      </div>
+      <div class="crt-loader-noise"></div>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('load', function() {
+      const spinner = document.getElementById('loading-spinner');
+      spinner.style.opacity = 0;
+      setTimeout(() => spinner.style.display = 'none', 500);
+    });
+  </script>
+  <!-- CRT Effects -->
+  <div class="noise"></div>
+  <div class="scanlines"></div>
+  <div class="scanline"></div>
+  
+  <!-- Main Container -->
+  <div class="terminal-container">
+    <!-- Header -->
+    <div class="terminal-header">
+      <div class="logo">JIANG JINGZHE<span class="blink-underscore">_</span>GPT</div>
+      <div class="header-controls">
+        <button class="ctrl-btn minimize">_</button>
+        <button class="ctrl-btn maximize">□</button>
+        <button class="ctrl-btn close">✕</button>
+      </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="terminal-sidebar">
+      <div class="sidebar-header">
+        <span class="icon">📁</span> CONVERSATIONS
+      </div>
+      <div class="conversation-list">
+        <!-- 动态插入会话项 -->
+      </div>
+      <div class="sidebar-footer">
+        <button class="new-chat-btn">+ NEW CHAT</button>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="terminal-content">
+      <!-- Model Selector -->
+      <div class="model-selector">
+        <select id="model-select">
+          <option value="gpt-4o">GPT-4o</option>
+          <option value="gpt-4-turbo">GPT-4 Turbo</option>
+          <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+        </select>
+        <div class="model-status">
+          <span class="status-indicator online"></span>
+          <span>API ONLINE</span>
+        </div>
+      </div>
+      
+      <!-- Chat Container -->
+      <div class="chat-container" id="chat-container">
+        <div class="welcome-message">
+          <div class="welcome-title">JIANG JINGZHE<span class="blink-underscore">_</span>GPT TERMINAL v1.0</div>
+          <div class="welcome-text">
+            > SYSTEM INITIALIZED<br>
+            > READY FOR USER INPUT<br>
+            > MODEL: GPT-4o ONLINE
+          </div>
+        </div>
+      </div>
+      
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-container">
+          <textarea id="user-input" placeholder="TYPE YOUR MESSAGE HERE..." rows="1"></textarea>
+          <button id="send-button" class="send-btn">
+            <span class="send-icon">⏎</span>
+          </button>
+        </div>
+        <div class="input-footer">
+          <span class="hint-text">Press Enter to send, Shift+Enter for new line</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Status Bar -->
+    <div class="terminal-statusbar">
+      <div class="status-item">
+        <span class="label">TOKENS:</span>
+        <span class="value" id="token-count">0</span>
+      </div>
+      <div class="status-item">
+        <span class="label">LATENCY:</span>
+        <span class="value" id="latency">0ms</span>
+      </div>
+      <div class="status-item">
+        <span class="label">STATUS:</span>
+        <span class="value" id="status">READY</span>
+      </div>
+      <div class="status-item datetime">
+        <span id="update-time">1992-12-15 16:23:42</span>
+      </div>
+    </div>
+  </div>
+  <div class="crt-warp"></div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script>
+  // 检测移动端
+  function isMobile() {
+    return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+  }
+  if (isMobile()) {
+    document.body.classList.add('mobile');
+    // 你可以在这里弹窗提示或做其他适配
+    // alert('检测到手机浏览器，已切换为移动端布局');
+  }
+</script>
+</body>
+</html>
